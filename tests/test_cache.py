@@ -1,6 +1,6 @@
 import sys
 import os
-sys.path.insert(0, os.path.dirname(__file__), '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 from cache_sim import fifo, lru, optff_fast as optff
 
@@ -28,7 +28,7 @@ def test_fifo_basic_evict():
 def test_lru_basic_evict():
 	reqs = [1, 2, 1, 3, 2]
 	assert lru(2, reqs) == 4, f"Expected 4, got {lru(2, reqs)}"
-	print(PASS test_lru_basic_eviction")
+	print("PASS test_lru_basic_eviction")
 
 def test_optff_evicts_never_used():
 	reqs = [1, 2, 3, 1]
@@ -94,7 +94,7 @@ def test_single_request():
 def test_example_file():
 	"""match the expected outcome from the example file"""
 	reqs = [1,2,3,4,1,2,5,1,2,3,4,5,3,2,1,4,5,2,3,1]
-	assert fifp(3, reqs) == 13, f"got {fifo(3, reqs)}"
+	assert fifo(3, reqs) == 13, f"got {fifo(3, reqs)}"
 	assert lru(3, reqs) == 17, f"got {lru(3, reqs)}"
 	assert optff(3, reqs) == 11, f"got {optff(3, reqs)}"
 	print("PASS test_example_file")
