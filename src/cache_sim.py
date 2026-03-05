@@ -14,13 +14,13 @@ def fifo(k: int, requests: list[int]) -> int:
 			pass
 		else:
 		# cache miss
-		misses += 1
-		if len(cache) == k:
-		# evict the oldest inserted item
-			evict = queue.popleft()
-			cache.remove(evict)
-		cache.add(req)
-		queue.append(req)
+			misses += 1
+			if len(cache) == k:
+			# evict the oldest inserted item
+				evict = queue.popleft()
+				cache.remove(evict)
+			cache.add(req)
+			queue.append(req)
 
 	return misses
 
@@ -30,7 +30,7 @@ def lru(k: int, requests: list[int]) -> int:
 	cache = OrderedDict()
 	misses = 0
 
-	for req in cache:
+	for req in requests:
 		if req in cache:
 		# if theres a cache hit, move it to the end
 			cache.move_to_end(req)
@@ -52,10 +52,10 @@ def optff(k: int, requests: list[int]) -> int:
 	next_use = [float('inf')] * m
 	last_seen = {}
 	for i in range(m - 1, -1, -1):
-		r = request[i]
+		r = requests[i]
 		if r in last_seen:
 			next_use[i] = last_seen[r]
-		last_seen[r] = 1
+		last_seen[r] = i
 
 	cache = set()
 	misses = 0
@@ -82,7 +82,7 @@ def optff(k: int, requests: list[int]) -> int:
 
 	return misses
 
-def optff_fast(k: int, requests: list[int]) -> int
+def optff_fast(k: int, requests: list[int]) -> int:
 
 	m = len(requests)
 
@@ -153,8 +153,8 @@ def main():
 	lru_misses = lru(k, requests)
 	optff_misses = optff_fast(k, requests)
 
-	print(f"FIFO : {fifo_misses}")
-	print(f"LRU : {lru_misses}")
+	print(f"FIFO  : {fifo_misses}")
+	print(f"LRU   : {lru_misses}")
 	print(f"OPTFF : {optff_misses}")
 
 if __name__ == "__main__":
