@@ -95,7 +95,7 @@ OPTFF : <number_of_misses>
 ## Reproducing Example Output
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/akeita05/greedy-algorithms.git
 cd cache-eviction
 python3 src/cache_sim.py data/example.in
 ```
