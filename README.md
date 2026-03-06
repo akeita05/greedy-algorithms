@@ -11,18 +11,18 @@
 ## Repository Structure
 
 ```
-cache-eviction/
+greedy-algorithms/
 ├── src/
-│   └── cache_siTFF)
+│   └── cache_sim.py
 ├── data/
-│   ├── examplenput
-│   ├── example.ou.in
-│   ├── test1.in      ts)
-│   ├── test2.in      ts)
-│   ├── test3.in        ts)
-│   └── lru_adversarial. 2)
+│   ├── example.in
+│   ├── example.out
+│   ├── test1.in
+│   ├── test2.in
+│   ├── test3.in
+│   └── lru_adversarial.in
 ├── tests/
-│   └── test_cache.py   es)
+│   └── test_cache.py 
 └── README.md
 ```
 
@@ -109,7 +109,7 @@ Output should match `data/example.out` exactly.
 - Item IDs are non-negative integers.
 - `k ≥ 1` and `m ≥ 1`.
 - Requests need not fit within the cache (i.e., distinct items may exceed `k`).
-- The OPTFF implementation runs in O(m · k) per eviction decision; for very large inputs this is adequate for correctness, though an O(m log k) variant using heaps is possible.
+- The OPTFF implementation runs in O(m · k) per eviction decision; for very large inputs, this is adequate for correctness, though an O(m log k) variant using heaps is possible.
 
 ---
 
@@ -133,7 +133,7 @@ The simulator was run on four input files. Results:
 ### Commentary
 
 **Does OPTFF have the fewest misses?**  
-Yes. In every test case OPTFF achieves strictly fewer misses than both FIFO and LRU. This is expected: OPTFF is the offline optimal algorithm, so no algorithm can do better on any fixed sequence.
+Yes. In every test case, OPTFF achieves strictly fewer misses than both FIFO and LRU. This is expected: OPTFF is the offline optimal algorithm, so no algorithm can do better on any fixed sequence.
 
 **How does FIFO compare to LRU?**  
 On the three larger test files (test1–test3), FIFO and LRU tie. This happens because those sequences use a cycling access pattern over a working set larger than the cache; both policies end up evicting a useful item on every miss. On the `example.in` sequence (which has irregular temporal locality), LRU actually performs *worse* than FIFO (17 vs. 13 misses). This illustrates an important point: LRU's recency heuristic can backfire when the access pattern does not exhibit strong temporal locality. Repeatedly touching an item "protects" it under LRU even if it is not needed soon, while FIFO would have evicted it long ago. Neither policy dominates the other in general.
@@ -190,7 +190,7 @@ $$\text{MISSES}_{\text{OPT}}(\sigma) \;\leq\; \text{MISSES}_{A}(\sigma).$$
 
 **Proof (Exchange Argument).**
 
-We show that OPTFF can be transformed into any other algorithm A step-by-step without decreasing the number of misses, which implies OPTFF's miss count cannot exceed A's.
+We show that OPTFF can be transformed into any other algorithm, step-by-step, without decreasing the number of misses, which implies OPTFF's miss count cannot exceed A's.
 
 **Setup.** Fix the request sequence $\sigma = r_1, r_2, \ldots, r_m$ and cache capacity $k$. Consider any offline algorithm A. We will construct a sequence of modified algorithms $A = A_0, A_1, A_2, \ldots$ where each $A_i$ differs from OPTFF in at most the cache states *after* the first $i$ misses, and $\text{MISSES}(A_i) \leq \text{MISSES}(A_{i-1})$. At the end, $A_m = \text{OPT}$.
 
@@ -200,9 +200,9 @@ We show that OPTFF can be transformed into any other algorithm A step-by-step wi
 - OPT evicts the item $q$ whose next request is *farthest* in the future (call that position $t_q$).
 - A evicts some item $q'$ with next use at position $t_{q'} \leq t_q$.
 
-We modify A into A' which evicts $q$ instead of $q'$ on this miss. We claim A' has no more misses than A:
+We modify A into A', which evicts $q$ instead of $q'$ on this miss. We claim A' has no more misses than A:
 
-- Between now and position $t_{q'}$ (the next request for $q'$): A' holds $q'$ in cache and lacks $q$. But A originally lacked $q'$ and held $q$. Any request for $q$ before $t_{q'}$ is a miss for A but a hit for A'; any request for $q'$ is a hit for A but a miss for A'. However, since $t_{q'} \leq t_q$, item $q'$ is requested no later than $q$. We can "swap" the roles of $q$ and $q'$ in A's cache to match A' without increasing total misses — the first discrepancy request is for $q'$ (a miss for A'), which was a hit for A, but at that point A' can re-insert $q'$ and the cache states become identical again. The net change in misses is **zero**.
+- Between now and position $t_{q'}$ (the next request for $q'$): A' holds $q'$ in cache and lacks $q$. But A originally lacked $q'$ and held $q$. Any request for $q$ before $t_{q'}$ is a miss for A, but a hit for A'; any request for $q'$ is a hit for A but a miss for A'. However, since $t_{q'} \leq t_q$, item $q'$ is requested no later than $q$. We can "swap" the roles of $q$ and $q'$ in A's cache to match A' without increasing total misses — the first discrepancy request is for $q'$ (a miss for A'), which was a hit for A, but at that point A' can re-insert $q'$ and the cache states become identical again. The net change in misses is **zero**.
 - After position $t_{q'}$, A and A' have identical cache states.
 
 Thus MISSES(A') ≤ MISSES(A).
@@ -211,7 +211,7 @@ Thus MISSES(A') ≤ MISSES(A).
 1. Makes one more eviction decision agree with OPTFF.
 2. Does not increase the total miss count.
 
-After at most $m$ such exchanges the algorithm is identical to OPTFF. Since each step is non-increasing in misses,
+After at most $m$ such exchanges, the algorithm is identical to OPTFF. Since each step is non-increasing in misses,
 
 $$\text{MISSES}_{\text{OPT}} \;\leq\; \text{MISSES}_{A}.$$
 
